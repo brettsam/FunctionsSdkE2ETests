@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <MicrosoftNetSdkFunctionsVersion>1.0.29</MicrosoftNetSdkFunctionsVersion>
+    
+    <!-- This is used by the DirectRef solution -->
+    <ExtensionsMetadataGeneratorDirectReferenceVersion>1.1.2</ExtensionsMetadataGeneratorDirectReferenceVersion>
+  </PropertyGroup>  
+</Project>
