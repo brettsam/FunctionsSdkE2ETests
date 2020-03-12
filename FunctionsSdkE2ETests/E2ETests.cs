@@ -11,7 +11,16 @@ namespace FunctionsSdkE2ETests
 {
     public class E2ETests
     {
-        private static string _expectedExtensionsJson = "{\"extensions\":[{ \"name\": \"Startup\", \"typeName\":\"SharedStartup.Startup, SharedStartup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\"}]}";
+        private const string _expectedExtensionsJson = "{\"extensions\":[{ \"name\": \"Startup\", \"typeName\":\"SharedStartup.Startup, SharedStartup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\"}]}";
+        private const string _expectedBinFolder = @"\bin";
+
+        private void CleanBinFolders(string rootDir)
+        {
+            foreach (string binDir in Directory.EnumerateDirectories(rootDir, "bin", new EnumerationOptions { RecurseSubdirectories = true }))
+            {
+                Directory.Delete(binDir, true);
+            }
+        }
 
         [Fact]
         public void Build_V1()
@@ -57,7 +66,7 @@ namespace FunctionsSdkE2ETests
             RunDotNet("clean", workingDir, solutionFile);
             RunDotNet("build", workingDir, solutionFile);
 
-            ValidateExtensionsJsonRecursive(Path.Combine(workingDir, solutionName), 1,
+            ValidateExtensionsJsonRecursive(Path.Combine(workingDir, solutionName), 1, expectedFolder: _expectedBinFolder,
                 ValidateDirectRefStartupExtension,
                 ValidateSharedStartupExtension);
         }
@@ -79,7 +88,7 @@ namespace FunctionsSdkE2ETests
             RunDotNet("clean", workingDir, solutionFile);
             RunDotNet("publish", workingDir, solutionFile, $"-o {publishDir} /bl");
 
-            ValidateExtensionsJsonRecursive(publishDir, 1,
+            ValidateExtensionsJsonRecursive(publishDir, 1, expectedFolder: _expectedBinFolder,
                 ValidateDirectRefStartupExtension,
                 ValidateSharedStartupExtension);
         }
@@ -102,6 +111,10 @@ namespace FunctionsSdkE2ETests
             string solutionName = "Razor";
             string solutionFile = solutionName + ".sln";
             string workingDir = FindContainingDirectory(solutionFile);
+
+            string projectDir = Path.Combine(workingDir, solutionName);
+
+            CleanBinFolders(projectDir);
 
             RunDotNet("restore", workingDir, solutionFile);
             RunDotNet("clean", workingDir, solutionFile);
@@ -133,6 +146,70 @@ namespace FunctionsSdkE2ETests
             }
         }
 
+        [Fact]
+        public void Build_NoSdkRef()
+        {
+            string solutionName = "NoSdkRef";
+
+            string solutionFile = solutionName + ".sln";
+            string workingDir = FindContainingDirectory(solutionFile);
+
+            string projectDir = Path.Combine(workingDir, solutionName);
+
+            CleanBinFolders(projectDir);
+
+            RunDotNet("restore", workingDir, solutionFile);
+            RunDotNet("clean", workingDir, solutionFile);
+            RunDotNet("build", workingDir, solutionFile);
+
+            ValidateExtensionsJsonRecursive(projectDir, 1, expectedFolder: @"Debug\netcoreapp2.1",
+                t =>
+                {
+                    return t["name"].ToString() == "AzureStorage"
+                        && t["typeName"].ToString() == "Microsoft.Azure.WebJobs.Extensions.Storage.AzureStorageWebJobsStartup, Microsoft.Azure.WebJobs.Extensions.Storage, Version=3.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35";
+                });
+        }
+
+
+        [Fact]
+        public void Build_V2()
+        {
+            RunBasicValidation("V2");
+        }
+
+        [Fact]
+        public void Build_V3()
+        {
+            RunBasicValidation("V3");
+        }
+
+        private void RunBasicValidation(string solutionName)
+        {
+            string solutionFile = solutionName + ".sln";
+            string workingDir = FindContainingDirectory(solutionFile);
+
+            string projectDir = Path.Combine(workingDir, solutionName);
+
+            CleanBinFolders(projectDir);
+
+            RunDotNet("restore", workingDir, solutionFile);
+            RunDotNet("clean", workingDir, solutionFile);
+            RunDotNet("build", workingDir, solutionFile);
+
+            ValidateExtensionsJsonRecursive(projectDir, 1, expectedFolder: _expectedBinFolder,
+                t =>
+                {
+                    return t["name"].ToString() == "AzureStorage"
+                        && t["typeName"].ToString() == "Microsoft.Azure.WebJobs.Extensions.Storage.AzureStorageWebJobsStartup, Microsoft.Azure.WebJobs.Extensions.Storage, Version=3.0.10.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35";
+                },
+                t =>
+                {
+                    return t["name"].ToString() == "Startup"
+                        && t["typeName"].ToString() == $"{solutionName}.Startup, {solutionName}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                });
+        }
+
+
         private void RunTest(string solutionName, int expectedExtensionsJsonCount = 1)
         {
             string solutionFile = solutionName + ".sln";
@@ -157,10 +234,10 @@ namespace FunctionsSdkE2ETests
 
         private void ValidateExtensionsJsonRecursive(string startingDir, int expectedCount)
         {
-            ValidateExtensionsJsonRecursive(startingDir, expectedCount, ValidateSharedStartupExtension);
+            ValidateExtensionsJsonRecursive(startingDir, expectedCount, expectedFolder: _expectedBinFolder, ValidateSharedStartupExtension);
         }
 
-        private void ValidateExtensionsJsonRecursive(string startingDir, int expectedCount, params Func<JToken, bool>[] extensionValidators)
+        private void ValidateExtensionsJsonRecursive(string startingDir, int expectedCount, string expectedFolder, params Func<JToken, bool>[] extensionValidators)
         {
             // Check all extensions.json
             IEnumerable<string> extensionsFiles = Directory.EnumerateFiles(Path.Combine(startingDir), "extensions.json", new EnumerationOptions { RecurseSubdirectories = true });
@@ -169,7 +246,8 @@ namespace FunctionsSdkE2ETests
 
             foreach (string file in extensionsFiles)
             {
-                Assert.True(Path.GetDirectoryName(file).EndsWith(@"\bin", StringComparison.OrdinalIgnoreCase), $"{file} is not in the bin folder");
+                Assert.True(Path.GetDirectoryName(file).EndsWith(expectedFolder, StringComparison.OrdinalIgnoreCase), $"'{file}' is not in the '{expectedFolder}' folder");
+
                 JObject actualJson = JObject.Parse(File.ReadAllText(file));
 
                 JToken[] extensionsArray = actualJson["extensions"]
