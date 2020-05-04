@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Script.ExtensionsMetadataGenerator" Version="$(ExtensionsMetadataGeneratorDirectReferenceVersion)" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="$(MicrosoftNetSdkFunctionsVersion)" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="$(MicrosoftNetSdkFunctionsV1PreviousVersion)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SharedStartup\SharedStartup.csproj" />

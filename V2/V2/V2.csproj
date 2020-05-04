@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.10" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="$(MicrosoftNetSdkFunctionsVersion)" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="$(MicrosoftNetSdkFunctionsV3Version)" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
