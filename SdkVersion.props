@@ -5,7 +5,7 @@
     <MicrosoftNetSdkFunctionsV3Version>3.0.9</MicrosoftNetSdkFunctionsV3Version>
 
     <!-- Some tests only roll EMG forward, so keep these one behind the latest -->
-    <MicrosoftNetSdkFunctionsV1PreviousVersion>1.0.36</MicrosoftNetSdkFunctionsV1PreviousVersion>
+    <MicrosoftNetSdkFunctionsV1PreviousVersion>1.0.37</MicrosoftNetSdkFunctionsV1PreviousVersion>
     <MicrosoftNetSdkFunctionsV3PreviousVersion>3.0.8</MicrosoftNetSdkFunctionsV3PreviousVersion>
 
     <!-- Some tests directly reference EMG; this should be latest -->
