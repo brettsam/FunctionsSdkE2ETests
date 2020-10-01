@@ -207,8 +207,17 @@ namespace FunctionsSdkE2ETests
                     return t["name"].ToString() == "Startup"
                         && t["typeName"].ToString() == $"{solutionName}.Startup, {solutionName}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
                 });
-        }
 
+            // The tests include one auto-created and one manually-created function.json file. The build should generate both into the output folder.
+            string projectFolder = Path.GetDirectoryName(projectDir);
+            string projectBinDir = Path.Combine(projectDir, solutionName, "bin");
+
+            IEnumerable<string> functionJsonFilePaths = Directory.EnumerateFiles(Path.Combine(projectBinDir), "function.json", new EnumerationOptions { RecurseSubdirectories = true });
+            // Comment out until 3.0.10 and 1.0.38 are released
+            // Assert.Collection(functionJsonFilePaths,
+            //     p => Assert.EndsWith("\\Function1\\function.json", p),
+            //     p => Assert.EndsWith("\\Function2\\function.json", p));
+        }
 
         private void RunTest(string solutionName, int expectedExtensionsJsonCount = 1)
         {

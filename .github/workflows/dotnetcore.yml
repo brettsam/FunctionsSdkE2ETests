@@ -15,6 +15,9 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '2.2.207'
+        dotnet-version: '2.2.x'
+    - uses: actions/setup-dotnet@v1
+      with:
+          dotnet-version: '3.1.x'
     - name: Test with dotnet
       run: dotnet test FunctionsSdkE2ETests.sln -v n

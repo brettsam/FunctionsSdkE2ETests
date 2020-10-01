@@ -11,6 +11,9 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="$(MicrosoftNetSdkFunctionsV3Version)" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Function2\function.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
