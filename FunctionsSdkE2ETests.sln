@@ -36,6 +36,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvc", "Razor\Mvc\Mvc.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedStartup", "SharedStartup\SharedStartup.csproj", "{36AFB021-DBBD-447D-A6FA-78FB3023D191}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreservedDependencies", "PreservedDependencies\PreservedDependencies.csproj", "{C61318C1-D908-42AE-9BBD-BC8A2D62F97C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,10 @@ Global
 		{36AFB021-DBBD-447D-A6FA-78FB3023D191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36AFB021-DBBD-447D-A6FA-78FB3023D191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36AFB021-DBBD-447D-A6FA-78FB3023D191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C61318C1-D908-42AE-9BBD-BC8A2D62F97C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C61318C1-D908-42AE-9BBD-BC8A2D62F97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C61318C1-D908-42AE-9BBD-BC8A2D62F97C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C61318C1-D908-42AE-9BBD-BC8A2D62F97C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{41E58322-B3F0-4B2D-8B7A-0626BCEBEDA3} = {41E8547B-A497-4C51-B648-80DC7FE9A681}
 		{5E5F7AFE-8CD7-4E20-B805-212A4A83F456} = {41E8547B-A497-4C51-B648-80DC7FE9A681}
 		{36AFB021-DBBD-447D-A6FA-78FB3023D191} = {41E8547B-A497-4C51-B648-80DC7FE9A681}
+		{C61318C1-D908-42AE-9BBD-BC8A2D62F97C} = {41E8547B-A497-4C51-B648-80DC7FE9A681}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0021489-706A-4A64-98FA-2D1DFE28695E}
